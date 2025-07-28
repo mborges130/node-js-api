@@ -1,23 +1,21 @@
 import express from 'express';
+import conectaNaDataBase from './config/dbConnect.js';
+import Livro from './models/Livro.js';
+
+const conexao = await conectaNaDataBase();
+conexao.on('error', (erro) => console.error(`Erro na conexão com o banco de dados: ${erro}`));
+
+conexao.once('open', () => console.log('Conexão com o banco de dados estabelecida com sucesso'));
 
 const app = express();
 app.use(express.json());
 
-const livros = [
-    { id: 1, 
-        titulo: 'A Fantástica Fabrica de Chocolate' },
-    { id: 2, 
-        titulo: 'O pequeno Princípe' },
-]
-function buscarLivro(id) {
-    return livros.findIndex(livro => livro.id === Number(id));
-};
-
 app.get('/', (req, res) => {
     res.status(200).send('Curso de Node.JS');
 });
-app.get('/livros', (req, res) => {
-    res.status(200).json(livros);
+app.get('/livros', async (req, res) => {
+    const listaLivros = await Livro.find({});   
+    res.status(200).json(listaLivros);
 });
 app.get('/livros/:id', (req, res) => {
     const index = buscarLivro(req.params.id);
@@ -54,4 +52,3 @@ app.delete('/livros/:id', (req, res) => {
 
 export default app;
 
-//mongodb+srv://admin:<db_password>@cluster0.6irsunf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0

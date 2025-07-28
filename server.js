@@ -1,3 +1,4 @@
+import "dotenv/config.js";
 import app from './src/app.js';
 
 app.listen(3000, () => {
