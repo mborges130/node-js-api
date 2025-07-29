@@ -13,10 +13,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.status(200).send('Curso de Node.JS');
 });
-app.get('/livros', async (req, res) => {
-    const listaLivros = await Livro.find({});   
-    res.status(200).json(listaLivros);
-});
+
 app.get('/livros/:id', (req, res) => {
     const index = buscarLivro(req.params.id);
     if (index !== -1) {
